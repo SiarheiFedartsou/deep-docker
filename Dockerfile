@@ -18,6 +18,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         git \
         vim \
         zsh \
+        ffmpeg \
         && \
 # ==================================================================
 # oh my zsh
@@ -45,13 +46,13 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         setuptools \
         && \
     $PIP_INSTALL \
-        numpy==1.14.5 \
-        scipy==1.1.0 \
-        pandas==0.23.4 \
-        cloudpickle==0.5.3 \
-        scikit-learn==0.20.0 \
-        matplotlib==2.2.2 \
-        Cython==0.28.5 \
+        numpy==1.16.2 \
+        scipy==1.2.1 \
+        pandas==0.24.2 \
+        cloudpickle==0.8.1 \
+        scikit-learn==0.20.3 \
+        matplotlib==3.0.3 \
+        Cython==0.29.6 \
         && \
 # ==================================================================
 # jupyter
@@ -63,56 +64,72 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # pytorch
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-    	torch==1.0.0 \
-        torchvision==0.2.1 \
+    	torch==1.0.1 \
+        torchvision==0.2.2 \
         torchtext==0.3.1 \
         && \
+# ==================================================================
+# apex
+# ------------------------------------------------------------------
+    $GIT_CLONE https://github.com/NVIDIA/apex.git ~/apex && \
+    cd ~/apex && \
+    $PIP_INSTALL -v --global-option="--cpp_ext" --global-option="--cuda_ext" . && \
 # ==================================================================
 # tensorflow
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        tensorflow-gpu==1.10.0 \
+        tensorflow-gpu==1.13.1 \
         && \
 # ==================================================================
 # keras
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        h5py==2.8.0 \
-        keras==2.2.2 \
+        h5py==2.9.0 \
+        keras==2.2.4 \
         && \
 # ==================================================================
 # opencv
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        opencv-python==3.4.4.19 \
+        opencv-python==4.0.0.21 \
+        && \
+# ==================================================================
+# audio
+# ------------------------------------------------------------------
+    $PIP_INSTALL \
+        librosa==0.6.3 \
         && \
 # ==================================================================
 # gradient boosting
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        xgboost==0.80 \
-        lightgbm==2.1.2 \
-        catboost==0.9.1.1 \
+        xgboost==0.82 \
+        lightgbm==2.2.3 \
+        catboost==0.13.1 \
         && \
 # ==================================================================
 # nlp
 # ------------------------------------------------------------------
     $PIP_INSTALL \
         nltk==3.4 \
-        spacy==2.0.18 \
-        gensim==3.6.0 \
+        spacy==2.1.3 \
+        gensim==3.7.1 \
+        pytorch-pretrained-bert==0.6.1 \
         && \
 # ==================================================================
 # utilities
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        albumentations==0.1.8 \
+        albumentations==0.2.2 \
+        tqdm==4.31.1 \
+        kaggle==1.5.3 \
+        pyarrow==0.12.1 \
         && \
 # ==================================================================
 # visualization
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        plotly==3.4.2 \
+        plotly==3.7.1 \
         seaborn==0.9.0 \
         && \
 # ==================================================================
@@ -135,6 +152,14 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth && \
     $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth && \
     $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/xception-43020ad28.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/resnext101_32x4d-29e315fa.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/resnext101_64x4d-e77a0586.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/senet154-c7b49a05.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet50-ce0d4300.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet101-7e38fcc6.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet152-d17c99b7.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnext50_32x4d-a260b3a4.pth && \
+    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnext101_32x4d-3b2fe3d8.pth && \
 # ==================================================================
 # config & cleanup
 # ------------------------------------------------------------------
@@ -144,4 +169,6 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     rm -rf /var/lib/apt/lists/* /tmp/* ~/*
     
 ENV TORCH_MODEL_ZOO=/models
+COPY .zshrc /root/.zshrc
 EXPOSE 8888 6006
+
