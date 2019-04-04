@@ -1,6 +1,6 @@
-FROM nvidia/cuda:9.0-cudnn7-devel-ubuntu16.04
+FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
-    PIP_INSTALL="python -m pip --no-cache-dir install --upgrade" && \
+    PIP_INSTALL="python3 -m pip --no-cache-dir install --upgrade" && \
     GIT_CLONE="git clone --depth 10" && \
     DOWNLOAD_MODEL="wget -P /models" && \
     rm -rf /var/lib/apt/lists/* \
@@ -36,6 +36,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     DEBIAN_FRONTEND=noninteractive $APT_INSTALL \
         python3.6 \
         python3.6-dev \
+        python3-distutils \
         && \
     wget -O ~/get-pip.py \
         https://bootstrap.pypa.io/get-pip.py && \
@@ -149,17 +150,17 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg13_bn-abd245e5.pth && \
     $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg16_bn-6c64b313.pth && \
     $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg19_bn-c79401a0.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/xception-43020ad28.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/resnext101_32x4d-29e315fa.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/resnext101_64x4d-e77a0586.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/senet154-c7b49a05.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet50-ce0d4300.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet101-7e38fcc6.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet152-d17c99b7.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnext50_32x4d-a260b3a4.pth && \
-    $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnext101_32x4d-3b2fe3d8.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/inceptionv4-8e4777a0.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/xception-43020ad28.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/resnext101_32x4d-29e315fa.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/resnext101_64x4d-e77a0586.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/senet154-c7b49a05.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet50-ce0d4300.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet101-7e38fcc6.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnet152-d17c99b7.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnext50_32x4d-a260b3a4.pth && \
+    # $DOWNLOAD_MODEL http://data.lip6.fr/cadene/pretrainedmodels/se_resnext101_32x4d-3b2fe3d8.pth && \
 # ==================================================================
 # config & cleanup
 # ------------------------------------------------------------------
