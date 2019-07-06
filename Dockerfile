@@ -94,15 +94,15 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     $PIP_INSTALL \
         opencv-python==4.1.0.25 \
         && \
-# ==================================================================
-# audio
-# ------------------------------------------------------------------
-    $PIP_INSTALL \
-        librosa==0.6.3 \
-        && \
-    $GIT_CLONE https://github.com/pytorch/audio.git ~/torchaudio && \
-    cd ~/torchaudio && \
-    python setup.py install && \
+# # ==================================================================
+# # audio
+# # ------------------------------------------------------------------
+#     $PIP_INSTALL \
+#         librosa==0.6.3 \
+#         && \
+#     $GIT_CLONE https://github.com/pytorch/audio.git ~/torchaudio && \
+#     cd ~/torchaudio && \
+#     python setup.py install && \
 # ==================================================================
 # mmdetection
 # ------------------------------------------------------------------
