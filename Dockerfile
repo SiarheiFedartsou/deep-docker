@@ -2,7 +2,6 @@ FROM nvidia/cuda:10.0-cudnn7-devel-ubuntu18.04
 RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     PIP_INSTALL="python3 -m pip --no-cache-dir install --upgrade" && \
     GIT_CLONE="git clone --depth 10" && \
-    DOWNLOAD_MODEL="wget -P /models" && \
     rm -rf /var/lib/apt/lists/* \
            /etc/apt/sources.list.d/cuda.list \
            /etc/apt/sources.list.d/nvidia-ml.list && \
@@ -19,6 +18,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         vim \
         zsh \
         ffmpeg \
+        ninja-build \
         && \
 # ==================================================================
 # oh my zsh
@@ -52,7 +52,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         pandas==0.24.2 \
         cloudpickle==0.8.1 \
         scikit-learn==0.21.2 \
-        matplotlib==3.1.0 \
+        matplotlib==3.1.1 \
         Cython==0.29.10 \
         && \
 # ==================================================================
@@ -69,12 +69,6 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
         torchvision==0.3.0 \
         torchtext==0.3.1 \
         && \
-# # ==================================================================
-# # apex
-# # ------------------------------------------------------------------
-#     $GIT_CLONE https://github.com/NVIDIA/apex.git ~/apex && \
-#     cd ~/apex && \
-#     $PIP_INSTALL -v --global-option="--cpp_ext" --global-option="--cuda_ext" . && \
 # ==================================================================
 # tensorflow
 # ------------------------------------------------------------------
@@ -94,22 +88,6 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     $PIP_INSTALL \
         opencv-python==4.1.0.25 \
         && \
-# # ==================================================================
-# # audio
-# # ------------------------------------------------------------------
-#     $PIP_INSTALL \
-#         librosa==0.6.3 \
-#         && \
-#     $GIT_CLONE https://github.com/pytorch/audio.git ~/torchaudio && \
-#     cd ~/torchaudio && \
-#     python setup.py install && \
-# ==================================================================
-# mmdetection
-# ------------------------------------------------------------------
-    $GIT_CLONE git clone https://github.com/open-mmlab/mmdetection.git ~/mmdetection && \
-    cd ~/mmdetection && \
-    ./compile.sh && \
-    python setup.py install && \
 # ==================================================================
 # gradient boosting
 # ------------------------------------------------------------------
@@ -131,11 +109,11 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # utilities
 # ------------------------------------------------------------------
     $PIP_INSTALL \
-        albumentations==0.2.3 \
-        tqdm==4.32.1 \
+        albumentations==0.3.0 \
+        tqdm==4.32.2 \
         fastprogress=0.1.21 \
         kaggle==1.5.4 \
-        pyarrow==0.13.0 \
+        pyarrow==0.14.0 \
         && \
 # ==================================================================
 # visualization
@@ -149,18 +127,6 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
 # ------------------------------------------------------------------
     $PIP_INSTALL \
         pretrainedmodels==0.7.4 \
-        && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/resnet18-5c106cde.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/resnet34-333f7ec4.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/resnet50-19c8e357.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg11-bbd30ac9.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg13-c768596a.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg16-397923af.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg19-dcbb9e9d.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg11_bn-6002323d.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg13_bn-abd245e5.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg16_bn-6c64b313.pth && \
-    $DOWNLOAD_MODEL https://download.pytorch.org/models/vgg19_bn-c79401a0.pth && \
 # ==================================================================
 # config & cleanup
 # ------------------------------------------------------------------
@@ -169,7 +135,6 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     apt-get autoremove && \
     rm -rf /var/lib/apt/lists/* /tmp/* ~/*
     
-ENV TORCH_MODEL_ZOO=/models
 ENV LANG=C.UTF-8
 ENV LC_ALL=C.UTF-8
 COPY .zshrc /root/.zshrc
