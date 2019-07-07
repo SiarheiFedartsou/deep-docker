@@ -111,7 +111,7 @@ RUN APT_INSTALL="apt-get install -y --no-install-recommends" && \
     $PIP_INSTALL \
         albumentations==0.3.0 \
         tqdm==4.32.2 \
-        fastprogress=0.1.21 \
+        fastprogress==0.1.21 \
         kaggle==1.5.4 \
         pyarrow==0.14.0 \
         && \
