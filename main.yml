@@ -1,0 +1,46 @@
+- hosts: cloud
+  become: yes
+  become_method: sudo
+  vars:
+    pip_install_packages:
+      - name: docker
+  roles:
+    - role: geerlingguy.pip
+    - role: geerlingguy.docker
+      docker_users:
+        - "{{ ansible_user }}"
+    - role: nvidia.nvidia_driver
+    - role: nvidia.nvidia_docker
+    - role: gantsign.oh-my-zsh
+      users:
+        - username: "{{ ansible_user }}"
+  tasks:
+  - name: Download Oh My Zsh config
+    get_url:
+      url: https://raw.githubusercontent.com/SiarheiFedartsou/dotfiles/master/.zshrc
+      dest: /home/{{ ansible_user }}/.zshrc
+      force: true
+  - name: Install packages
+    apt:
+      name: ['git', 'wget', 'curl', 'software-properties-common', 'cmake', 'libncurses5-dev', 'libncursesw5-dev']
+      update_cache: yes
+  - name: Build and install nvtop
+    script: setup_nvtop.sh
+  - name: Pull Docker Image
+    docker_image: 
+      name: sfedartsou/deep-docker
+      source: pull
+  - name: Create Working Directory
+    file:
+      path: /home/{{ ansible_user }}/work
+      state: directory
+  - name: Run ML Container
+    docker_container:
+      name: ml-container
+      image: sfedartsou/deep-docker
+      state: started
+      volumes: /home/{{ ansible_user }}/work:/data
+      restart_policy: always
+      published_ports: 8888:8888
+      command: "jupyter notebook --no-browser --ip=0.0.0.0 --allow-root --NotebookApp.token= --notebook-dir='/data'"
+  

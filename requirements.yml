@@ -1,0 +1,11 @@
+- src: gantsign.oh-my-zsh
+  version: 2.2.0
+- src: nvidia.nvidia_driver
+  version: v1.0.0
+- src: nvidia.nvidia_docker
+  version: v1.0.0
+- src: geerlingguy.docker
+  version: 2.5.2
+- src: geerlingguy.pip
+  version: 1.3.0
+  
